@@ -167,8 +167,8 @@ fun ProfileScreen() {
             )
             Spacer(Modifier.height(8.dp))
             for ((phone, label, hint) in listOf(
-                Triple(true, "The phone's canceller", "VoltKit's default on Android"),
-                Triple(false, "WebRTC's canceller", "For a phone whose own one lets echo through"),
+                Triple(true, "The phone's canceller", "The Android SDK's default"),
+                Triple(false, "WebRTC's canceller", "For a phone whose own one lets echo through. Weaker on the loudspeaker"),
             )) {
                 SheetRow(if (phoneCanceller == phone) Ion.checkmarkCircle else Ion.ellipsisHorizontal, label, {
                     close()
