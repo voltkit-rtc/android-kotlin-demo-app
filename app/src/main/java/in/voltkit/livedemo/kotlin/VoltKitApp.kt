@@ -17,8 +17,9 @@ class VoltKitApp : Application() {
 
 /**
  * Which echo canceller to use. This SDK uses the phone's own by default. On some phones it does not cope with the loudspeaker
- * (the other person hears themselves), and VoltKit's docs say to try such a phone both ways: WebRTC's own canceller in this
- * SDK's build is the older mobile one. The setting is in Profile, and applies the next time the app starts.
+ * (the other person hears themselves), and VoltKit's docs say to try such a phone both ways. With the phone's canceller off,
+ * WebRTC's is used, and from SDK 0.9.17 it gets a loudspeaker tuning on phones whose own canceller is Android's software one
+ * (`RtcOptions.echoSuppression`, `auto` by default). The setting is in Profile, and applies the next time the app starts.
  */
 object EchoSetting {
     private const val PREFS = "settings"

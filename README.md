@@ -2,13 +2,31 @@
 
 A complete live social app for Android, built on [VoltKit RTC](https://voltkit.in/rtc/android) and written to be read. It has video
 rooms, audio rooms with seats, random 1v1 video calls, room chat, direct messages, moderation and SVGA gifts, all on the official Android
-SDK, [`in.voltkit:voltkit-rtc`](https://voltkit.in/docs/android-sdk). The UI is Jetpack Compose.
+SDK, [`in.voltkit:voltkit-rtc`](https://voltkit.in/docs/android-sdk) 0.9.17. The UI is Jetpack Compose.
 
 Use it two ways: run it to see what VoltKit does, or open the file for the feature you need and copy the approach into your own app.
 
-It is the same app as [VoltKit Native](https://github.com/voltkit-rtc/react-native-example-audio-video) (React Native) and
-[VoltKit Flutter](https://github.com/voltkit-rtc/flutter-demo-app), on the same
-[backend](https://github.com/voltkit-rtc/voltkit-rtc-backend-demo). All three can share a room.
+## Start here
+
+| I want to... | Read |
+| --- | --- |
+| Run this app | [Run it](#run-it), below |
+| Add VoltKit to my own Android app, step by step | [Integrate VoltKit into your app](docs/integrate-into-your-app.md) |
+| Build seats, roles, moderation, chat, gifts, 1v1 calls and DMs | [Build the features](docs/build-the-features.md) |
+| Find the code for one feature | [Where each feature lives](#where-each-feature-lives), below |
+| Build the backend that hands out tokens | [voltkit-rtc-backend-demo](https://github.com/voltkit-rtc/voltkit-rtc-backend-demo) and its [server SDK guide](https://github.com/voltkit-rtc/voltkit-rtc-backend-demo/blob/main/docs/voltkit-server-sdk.md) |
+| Read VoltKit's own Android guide | [voltkit.in/docs/android-sdk](https://voltkit.in/docs/android-sdk) |
+
+## The same app on every platform
+
+All three run on one backend and can share a room.
+
+| | Repo |
+| --- | --- |
+| Backend (Node.js) | [voltkit-rtc-backend-demo](https://github.com/voltkit-rtc/voltkit-rtc-backend-demo) |
+| React Native | [react-native-example-audio-video](https://github.com/voltkit-rtc/react-native-example-audio-video) |
+| Flutter | [flutter-demo-app](https://github.com/voltkit-rtc/flutter-demo-app) |
+| Kotlin, Android (this one) | [android-kotlin-demo-app](https://github.com/voltkit-rtc/android-kotlin-demo-app) |
 
 ## Run it
 
@@ -50,6 +68,7 @@ Paths are under [`app/src/main/java/in/voltkit/livedemo/kotlin/`](app/src/main/j
 | Lounge and direct messages | `screens/ChatScreens.kt` | `ChatClient` |
 | SVGA gifts and entrance effects | `gifts/` | Gift messages sent by the backend |
 | Staying alive in the background | `rtc/CallService.kt` | `pauseCameraInBackground` |
+| Sound reports for echo trouble | `rtc/SoundReport.kt` | `getDiagnostics`, `VoltKitRtc.VERSION` |
 
 ## How a room works
 
@@ -81,7 +100,8 @@ from whether they are publishing.
 | A foreground service runs while in a room or call | Android cuts an app's network and microphone within seconds of leaving the screen without one. Its notification has a Leave button |
 | The camera goes off in the background | `pauseCameraInBackground = true`: viewers see the camera off, not a frozen picture, and it comes back on return |
 | Video is drawn on a `TextureView` | A `SurfaceViewRenderer` cannot have rounded corners or views over it. `VideoTextureView` uses WebRTC's `EglRenderer` on the SDK's EGL context |
-| Profile → Echo cancellation | The Android SDK uses the phone's echo canceller by default. If someone hears themselves from your phone on the loudspeaker, try WebRTC's. It applies on the next start |
+| Profile → Echo cancellation | The Android SDK uses the phone's echo canceller by default. If someone hears themselves from your phone on the loudspeaker, try WebRTC's: from SDK 0.9.17 it is tuned for the loudspeaker on phones that need it. It applies on the next start |
+| Room menu → Copy a sound report | Copies what VoltKit asks for with an echo report: the phone, Android version, where the sound plays, the call volume, the canceller in use and `getDiagnostics()`. Also in a 1v1 call's Safety menu |
 | Two phones in one room echo on the loudspeaker | Each canceller removes only its own speaker's sound. Test in different rooms, or with earphones on one phone |
 | No Flip button on some phones | It is hidden when the phone has one camera |
 

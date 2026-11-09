@@ -28,6 +28,7 @@ import `in`.voltkit.livedemo.kotlin.rtc.RoomEngine
 import `in`.voltkit.livedemo.kotlin.rtc.Rules
 import `in`.voltkit.livedemo.kotlin.rtc.SeatAction
 import `in`.voltkit.livedemo.kotlin.rtc.Seats
+import `in`.voltkit.livedemo.kotlin.rtc.copySoundReport
 import `in`.voltkit.livedemo.kotlin.ui.Avatar
 import `in`.voltkit.livedemo.kotlin.ui.C
 import `in`.voltkit.livedemo.kotlin.ui.G
@@ -262,6 +263,7 @@ fun showMoreSheet(engine: RoomEngine, onLeave: () -> Unit, onPeople: () -> Unit,
     sheetScope.launch(Dispatchers.Main.immediate) {
         val others = engine.hasOtherOutputs()
         SheetHost.show("more-sheet", "Room") {
+            val context = androidx.compose.ui.platform.LocalContext.current.applicationContext
             val isHost = engine.isHost
             val network = engine.network
             Column(Modifier.verticalScroll(rememberScrollState())) {
@@ -301,6 +303,13 @@ fun showMoreSheet(engine: RoomEngine, onLeave: () -> Unit, onPeople: () -> Unit,
                         hint = network.rttMs?.let { "$it ms round trip" },
                     )
                 }
+                SheetRow(
+                    Ion.pulseOutline,
+                    "Copy a sound report",
+                    { close(); sheetScope.launch { copySoundReport(context, engine.client, engine.speakerphone) } },
+                    hint = "Echo or other sound trouble? Send this to VoltKit",
+                    id = "more-sound-report",
+                )
                 if (!isHost) SheetRow(Ion.flagOutline, "Report this room", { close(); onReportRoom() }, id = "more-report")
                 SheetRow(Ion.flashOutline, Voltkit.POWERED_BY, { close(); onSite() }, hint = "A Kotlin demo. Build yours at voltkit.in", gold = true)
                 SheetRow(Ion.powerOutline, if (isHost) "End the room" else "Leave the room", { close(); onLeave() }, danger = true, id = "more-leave")

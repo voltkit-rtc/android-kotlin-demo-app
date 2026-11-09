@@ -72,7 +72,7 @@ kotlin {
 }
 
 dependencies {
-    implementation("in.voltkit:voltkit-rtc:0.9.16")
+    implementation("in.voltkit:voltkit-rtc:0.9.17")
 
     implementation("androidx.core:core-ktx:1.17.0")
     implementation("androidx.activity:activity-compose:1.10.1")

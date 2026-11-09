@@ -86,6 +86,7 @@ import `in`.voltkit.livedemo.kotlin.rtc.PermissionAsker
 import `in`.voltkit.livedemo.kotlin.rtc.Problems
 import `in`.voltkit.livedemo.kotlin.rtc.RemoteVideo
 import `in`.voltkit.livedemo.kotlin.rtc.askMediaConsent
+import `in`.voltkit.livedemo.kotlin.rtc.copySoundReport
 import `in`.voltkit.livedemo.kotlin.screens.room.showReportSheet
 import `in`.voltkit.livedemo.kotlin.ui.Avatar
 import `in`.voltkit.livedemo.kotlin.ui.Backdrop
@@ -436,7 +437,15 @@ private fun Radar() {
 private fun showSafety(session: CallSession, onBlocked: () -> Unit) {
     val peer = session.peer
     SheetHost.show("call-safety", "Safety") {
+        val context = LocalContext.current.applicationContext
         Column {
+            SheetRow(
+                Ion.pulseOutline,
+                "Copy a sound report",
+                { close(); kotlinx.coroutines.MainScope().launch { copySoundReport(context, session.client, loudspeaker = true) } },
+                hint = "Echo or other sound trouble? Send this to VoltKit",
+                id = "call-sound-report",
+            )
             SheetRow(Ion.flagOutline, "Report ${peer.name}", { close(); showReportSheet(peer.id, peer.name) }, id = "call-report")
             SheetRow(
                 Ion.banOutline, "Block ${peer.name}",
